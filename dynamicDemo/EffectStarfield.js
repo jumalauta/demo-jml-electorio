@@ -27,6 +27,9 @@ Demo.prototype.addEffectEntities = function (
   let dead = 0;
   let redBoost = false;
   let blueBoost = false;
+  let redMinorBoost = false;
+  let blueMinorBoost = false;
+  let minorBoostUsed = false;
   let eatThreshold = 0.02;
   const sizeX = areaSize * (16/9);
   const sizeY = areaSize *1.1;
@@ -66,7 +69,6 @@ Demo.prototype.addEffectEntities = function (
       if(getSceneTimeFromStart()>60)
       {
         window.suddenDeath = 1;
-        console.log("timer " +getSceneTimeFromStart());
       }
 
       for(let i = 0; (i < entities.length);i++)
@@ -166,7 +168,11 @@ Demo.prototype.addEffectEntities = function (
             window.end = 1;
 
         if(getSceneTimeFromStart() > window.endTime + 15)
-            window.location.hash = 'webdemoexe_exit';
+        {
+          window.location.hash = 'webdemoexe_exit';
+          window.location.reload();
+        }
+            
 
         if(window.end)
         {          
@@ -194,6 +200,8 @@ Demo.prototype.addEffectEntities = function (
         {
           redBoost = true;
           blueBoost = false;
+          redMinorBoost = false;
+          blueMinorBoost = false;
           redMaxHealth = 2+Math.random()*3;
           blueMaxHealth = 2;
         }
@@ -201,9 +209,25 @@ Demo.prototype.addEffectEntities = function (
         {
           redBoost = false;
           blueBoost = true;
+          redMinorBoost = false;
+          blueMinorBoost = false;
           redMaxHealth = 2;
           blueMaxHealth = 2+Math.random()*3;
+        } else if(reds - blues < -425 && !redMinorBoost && !redBoost && !minorBoostUsed)
+        {
+          redMinorBoost = true;
+          blueMinorBoost = false;
+          redMaxHealth = 1.5+Math.random()*1;
+          blueMaxHealth = 2;
         }
+        else if(blues - reds < -425 && !blueMinorBoost && !blueBoost && !minorBoostUsed)
+        {
+          redMinorBoost = false;
+          blueMinorBoost = true;
+          redMaxHealth = 2;
+          blueMaxHealth = 1.5+Math.random()*1;
+        }
+
         if(dead<1000)
         {
           window.redPercentage = 10*(reds/(1000-dead));

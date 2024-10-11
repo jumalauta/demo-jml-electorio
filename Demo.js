@@ -17,6 +17,8 @@ window.endTime = 9999;
 window.preEnd = 0;
 window.suddenDeathSFXPlayed = false;
 window.endSFXPlayed = false;
+window.postDistort = 1.0;
+window.shake = 0.0;
 includeFile('multiSceneEffects/PostProcess.js');
 includeFile('multiSceneEffects/dof.js')
 includeFile('multiSceneEffects/EffectExplosion.js');
@@ -171,7 +173,8 @@ Demo.prototype.init = function () {
     `Future`,
     `Färjan`,
     `United`,
-    `Fascist`]
+    `Fascist`,
+    `Center`]
 
   let partyNames2 = [
     `Party`,
@@ -216,7 +219,7 @@ Demo.prototype.init = function () {
   });
 
   this.loader.addAnimation([{
-    "start":0,"duration":8,
+    "start":0,"duration":7.9,
     "text":{"string":"Democracy has Failed","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
@@ -227,7 +230,7 @@ Demo.prototype.init = function () {
 
 
   this.loader.addAnimation([{
-    "start":4,"duration":4,
+    "start":4,"duration":3.85,
     "text":{"string":"We Have the Solution","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
@@ -237,7 +240,7 @@ Demo.prototype.init = function () {
   }]);
 
   this.loader.addAnimation([{
-    "start":8,"duration":8,
+    "start":8,"duration":7.9,
     "text":{"string":"Jumalauta R&D Presents","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
@@ -247,7 +250,7 @@ Demo.prototype.init = function () {
   }]);
 
   this.loader.addAnimation([{
-    "start":8.5,"duration":7.5,
+    "start":8.5,"duration":7.45,
     "text":{"string":"The Natural Process of Phagocytosis","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
@@ -257,7 +260,7 @@ Demo.prototype.init = function () {
   }]);
 
   this.loader.addAnimation([{
-    "start":8.75,"duration":7.25,
+    "start":8.75,"duration":7.21,
     "text":{"string":"as a Mechanism of the Societal Process","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
@@ -267,7 +270,7 @@ Demo.prototype.init = function () {
   }]);
 
   this.loader.addAnimation([{
-    "start":9,"duration":7,
+    "start":9,"duration":6.94,
     "text":{"string":"of the Marketplace of Ideas","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
@@ -277,7 +280,7 @@ Demo.prototype.init = function () {
   }]);
 
   this.loader.addAnimation([{
-    "start":9.25,"duration":6.75,
+    "start":9.25,"duration":6.72,
     "text":{"string":"as Applied to the Political Process","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
@@ -287,7 +290,7 @@ Demo.prototype.init = function () {
   }]);
 
   this.loader.addAnimation([{
-    "start":9.5,"duration":6.5,
+    "start":9.5,"duration":6.46,
     "text":{"string":"of the Bipartisan System","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
@@ -297,7 +300,7 @@ Demo.prototype.init = function () {
   }]);
 
   this.loader.addAnimation([{
-    "start":10,"duration":6,
+    "start":10,"duration":5.98,
     "text":{"string":"AKA","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
@@ -306,7 +309,7 @@ Demo.prototype.init = function () {
     "scale":[{"uniform2d":1.75}],
   }]);
   this.loader.addAnimation([{
-    "start":10.5,"duration":5.5,
+    "start":10.5,"duration":5.49,
     "text":{"string":"elector.io","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
@@ -318,34 +321,34 @@ Demo.prototype.init = function () {
   // intro end 
 
   this.loader.addAnimation([{
-    "start":16,"duration":666,
+    "start":16.8,"duration":666,
     "text":{"string":partyNames1[party1[0]] + " " + partyNames2[party1[1]],"name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
     "color":[{"r":1.0,"g":1.0,"b":1.0, "a": ()=>1.0-window.preEnd}],
     "position":[{"x":-.2,"y":-0.36,"z":0}],
-    "scale":[{"uniform2d":1.75}],
+    "scale":[{"uniform2d":()=>1.4+window.redPercentage*.15}],
   }]);
 
   this.loader.addAnimation([{
-    "start":16,"duration":666,
+    "start":16.85,"duration":666,
     "text":{"string":partyNames1[party2[0]] + " " + partyNames2[party2[1]],"name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
     "color":[{"r":1.0,"g":1.0,"b":1.0,"a": ()=>1.0-window.preEnd}],
     "position":[{"x":0.2,"y":-0.36,"z":0}],
-    "scale":[{"uniform2d":1.75}],
+    "scale":[{"uniform2d":()=>1.4+window.bluePercentage*.15}],
   }]);
 
   
 
   this.loader.addAnimation([{
-    "start":16,"duration":666,
+    "start":16.7,"duration":666,
     "text":{"string":"Voting Behavior Simulation in Progress","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
     "color":[{"r":1,"g":1,"b":1,"a":()=>1-(window.suddenDeath)-window.preEnd}],
-    "position":[{"x":0.0,"y":0.4,"z":0}],
+    "position":[{"x":()=>Math.sin(getSceneTimeFromStart()*1.5)*.02,"y":0.4,"z":0}],
     "scale":[{"uniform2d":1.75}],
   }]);
 
@@ -386,8 +389,8 @@ Demo.prototype.init = function () {
     },
     "perspective":"2d", 
     "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end*window.winnerparty1}],
-    "position":[{"x":0.0,"y":.1,"z":0}],
-    "scale":[{"uniform2d":3.5}],
+    "position":[{"x":()=>Math.sin(getSceneTimeFromStart()*1.5)*.01,"y":.1,"z":0}],
+    "scale":[{"uniform2d":3.5}]
   }]); 
 
   this.loader.addAnimation([{
@@ -396,8 +399,8 @@ Demo.prototype.init = function () {
     },
     "perspective":"2d", 
     "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end*window.winnerparty2}],
-    "position":[{"x":0.0,"y":.1,"z":0}],
-    "scale":[{"uniform2d":3.5}],
+    "position":[{"x":()=>Math.sin(getSceneTimeFromStart()*1.5)*.01,"y":.1,"z":0}],
+    "scale":[{"uniform2d":3.5}]
   }]); 
 
   this.loader.addAnimation([{
@@ -406,8 +409,8 @@ Demo.prototype.init = function () {
     },
     "perspective":"2d", 
     "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end*window.winnerparty3}],
-    "position":[{"x":0.0,"y":.1,"z":0}],
-    "scale":[{"uniform2d":3.5}],
+    "position":[{"x":()=>Math.sin(getSceneTimeFromStart()*1.5)*.01,"y":.1,"z":0}],
+    "scale":[{"uniform2d":3.5}]
   }]); 
 
   this.loader.addAnimation([{
@@ -420,7 +423,7 @@ Demo.prototype.init = function () {
     "scale":[{"uniform2d":2}],
   }]); 
 
-  
+  // generic runtime stuff handler
   this.loader.addAnimation({
     initFunction:(animation)=>{
     //    console.log('loading sounds');
@@ -438,18 +441,38 @@ Demo.prototype.init = function () {
     runFunction:(animation)=>{
 
 
-
-        if(window.suddenDeath && !window.suddenDeathSFXPlayed)
+      
+        if(window.suddenDeath && !window.suddenDeathSFXPlayed && window.preEnd<1)
         {
+        window.postDistort = 0.0;
+        window.shake = .015;
         window.suddenDeathSFXPlayed = true;
         animation.sounds.suddendeath.play();  
         }
 
         if(window.end && !window.endSFXPlayed)
           {
+          window.shake = .015;
           window.endSFXPlayed = true;
           animation.sounds.endhit.play();  
           }
+
+        if(window.postDistort<.8)
+        {
+          console.log("dist "+window.postDistort);
+          window.postDistort=+15*getDeltaTime();
+        }
+
+        if(window.suddenDeath && window.postDistort>.8)
+          window.postDistort = .8;
+
+        if(window.shake > 0)
+          window.shake-=.05*getDeltaTime();
+
+        if(window.shake<0)
+          window.shake=0.0;
+
+        
 
     }
 });

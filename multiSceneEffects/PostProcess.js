@@ -79,9 +79,9 @@ Demo.prototype.addPostProcess = function (image, bypass) {
       {additionalImages: ['spectogram.png'], 
         shader:{name:'multiSceneEffects/distortion.fs',
           variable:[
-               {name:'timeMultiplier',value:[0.8]}
+               {name:'timeMultiplier',value:[0.4]}
               ,{name:'fftShift',value:[0.8]}
-              ,{name:'mixShift',value:[()=>Sync.get('PostProc:Distortion')]}, //1.0 == distortion disabled
+              ,{name:'mixShift',value:[()=>window.postDistort]}, //1.0 == distortion disabled
               ,{name:'pixelSize',value:[()=> 0.007,0.007]}
               ,{name:'noiseWaveSpeed',value:[10]}
               ,{name:'noiseWaveSize',value:[0.05]}
@@ -106,8 +106,8 @@ Demo.prototype.addPostProcess = function (image, bypass) {
   this.loader.addAnimation({
     image: 'finalFbo.color.fbo',
     "position":[{
-      "x":()=>(Math.random()*Sync.get('PostProc:Shake'))-0.5*Sync.get('PostProc:Shake'),
-      "y":()=>(Math.random()*Sync.get('PostProc:Shake'))-0.5*Sync.get('PostProc:Shake')
+      "x":()=>(Math.random()*window.shake)-0.5*window.shake*Math.random(),
+      "y":()=>(Math.random()*window.shake)-0.5*window.shake*Math.random()
       }]
     });
 }
