@@ -9,11 +9,20 @@ window.camNear = 0.0;
 window.camFar = 0.0;
 window.redPercentage = 0.0;
 window.bluePercentage = 0.0;
+window.suddenDeath = 0;
+window.winnerparty1 = 0;
+window.winnerparty2 = 0;
+window.end = 0;
+window.endTime = 9999;
+window.preEnd = 0;
+window.suddenDeathSFXPlayed = false;
+window.endSFXPlayed = false;
 includeFile('multiSceneEffects/PostProcess.js');
 includeFile('multiSceneEffects/dof.js')
 includeFile('multiSceneEffects/EffectExplosion.js');
 includeFile('sceneIntro/intro.js');
-includeFile('multiSceneEffects/background.js');
+includeFile('sceneIntro/actualIntro.js');
+
 includeFile('dynamicDemo/EffectStarfield.js');
 Demo.prototype.cameraSetup = function() {
   this.loader.addAnimation({
@@ -57,7 +66,7 @@ Demo.prototype.setScene = function (sceneName) {
 };
 
 const settings = new Settings();
-//settings.engine.preload = false;
+settings.engine.preload = false;
 settings.demo.renderer.sortObjects = false;
 settings.demo.renderer.logarithmicDepthBuffer = false;
 settings.demo.sync.rocketFile = 'sync/bzdr.rocket';
@@ -84,12 +93,14 @@ Demo.prototype.init = function () {
   const beat = 60/bpm;
   const pattern = beat*8;
 
+  this.sceneActualIntro();
   this.sceneIntro();
-  this.bgEffect();
+
   this.loader.setScene('main');
 
   const scenes = [
-    {start: 0*window.pattern, duration: 120, name: 'intro',dof:false},
+    {start: 0, duration: 16, name: 'actualIntro',dof:false},
+    {start: 16, duration: 200, name: 'intro',dof:false},
   ];
 
   scenes.forEach((scene) => {
@@ -177,25 +188,260 @@ Demo.prototype.init = function () {
     `Socialism`,
     `Democracy`]
 
-  let party1 = [Math.floor(Math.random()*partyNames1.length), Math.floor(Math.random()*partyNames2.length)];
-  let party2 = [Math.floor(Math.random()*partyNames1.length), Math.floor(Math.random()*partyNames2.length)];
+  let party1 = [Math.floor(Math.random()*partyNames1.length),Math.floor(Math.random()*partyNames2.length)];
+  let party2 = [Math.floor(Math.random()*partyNames1.length),Math.floor(Math.random()*partyNames2.length)];
+
+
+  if (party2[1] == party1[1])
+    party2 = [Math.floor(Math.random()*partyNames1.length), Math.floor(Math.random()*partyNames2.length)];
+  if (party2[2] == party1[2])
+    party2 = [Math.floor(Math.random()*partyNames1.length), Math.floor(Math.random()*partyNames2.length)];
+
+  this.loader.addAnimation({
+    start:0,duration:16,
+    image: ['white.png'],
+    perspective: '3d',
+    color:[{"r":.0,"g":.0,"b":.0,"a":.5}],
+    position:[{"x":0,"y":0,"z":-15.0}],
+    scale: [{ uniform2d: 55.0}],   
+  });
+
+  this.loader.addAnimation({
+    start:0,duration:666,
+    image: ['white.png'],
+    perspective: '3d',
+    color:[{"r":.0,"g":.0,"b":.0,"a":()=>.5*window.preEnd}],
+    position:[{"x":0,"y":0,"z":-15.0}],
+    scale: [{ uniform2d: 55.0}],   
+  });
+
   this.loader.addAnimation([{
-    "start":0,"duration":666,
-    "text":{"string":partyNames1[party1[1]] + " " + partyNames2[party1[1]] + " ","name":"multiSceneEffects/techfont.ttf"
+    "start":0,"duration":8,
+    "text":{"string":"Democracy has Failed","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "position":[{"x":0,"y":0.16,"z":0}],
+    "scale":[{"uniform2d":2.75}],
+  }]);
+
+
+  this.loader.addAnimation([{
+    "start":4,"duration":4,
+    "text":{"string":"We Have a Solution","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "position":[{"x":0,"y":0,"z":0}],
+    "scale":[{"uniform2d":1.75}],
+  }]);
+
+  this.loader.addAnimation([{
+    "start":8,"duration":8,
+    "text":{"string":"Jumalauta R&D Presents","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "position":[{"x":0,"y":0.36,"z":0}],
+    "scale":[{"uniform2d":1.75}],
+  }]);
+
+  this.loader.addAnimation([{
+    "start":8.5,"duration":7.5,
+    "text":{"string":"The Natural Process of Phagocytosis","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "position":[{"x":0,"y":0.24,"z":0}],
+    "scale":[{"uniform2d":1.75}],
+  }]);
+
+  this.loader.addAnimation([{
+    "start":8.75,"duration":7.25,
+    "text":{"string":"as a Mechanism of the Societal Process","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "position":[{"x":0,"y":0.18,"z":0}],
+    "scale":[{"uniform2d":1.75}],
+  }]);
+
+  this.loader.addAnimation([{
+    "start":9,"duration":7,
+    "text":{"string":"of the Marketplace of Ideas","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "position":[{"x":0,"y":0.12,"z":0}],
+    "scale":[{"uniform2d":1.75}],
+  }]);
+
+  this.loader.addAnimation([{
+    "start":9.25,"duration":6.75,
+    "text":{"string":"as Applied to the Political Process","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "position":[{"x":0,"y":0.06,"z":0}],
+    "scale":[{"uniform2d":1.75}],
+  }]);
+
+  this.loader.addAnimation([{
+    "start":9.5,"duration":6.5,
+    "text":{"string":"of the Bipartisan System","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "position":[{"x":0,"y":0.0,"z":0}],
+    "scale":[{"uniform2d":1.75}],
+  }]);
+
+  this.loader.addAnimation([{
+    "start":10,"duration":6,
+    "text":{"string":"AKA","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "position":[{"x":0,"y":-0.12,"z":0}],
+    "scale":[{"uniform2d":1.75}],
+  }]);
+  this.loader.addAnimation([{
+    "start":10.5,"duration":5.5,
+    "text":{"string":"elect.or","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "position":[{"x":0,"y":-0.24,"z":0}],
+    "scale":[{"uniform2d":1.75}],
+  }]);
+
+  // intro end 
+
+  this.loader.addAnimation([{
+    "start":16,"duration":666,
+    "text":{"string":partyNames1[party1[0]] + " " + partyNames2[party1[1]],"name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
     "color":[{"r":1.0,"g":1.0,"b":1.0}],
     "position":[{"x":-.2,"y":-0.36,"z":0}],
     "scale":[{"uniform2d":1.75}],
   }]);
+
   this.loader.addAnimation([{
-    "start":0,"duration":666,
-    "text":{"string":partyNames1[party2[1]] + " " + partyNames2[party2[1]] + " ","name":"multiSceneEffects/techfont.ttf"
+    "start":16,"duration":666,
+    "text":{"string":partyNames1[party2[0]] + " " + partyNames2[party2[1]],"name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
     "color":[{"r":1.0,"g":1.0,"b":1.0}],
     "position":[{"x":0.2,"y":-0.36,"z":0}],
     "scale":[{"uniform2d":1.75}],
   }]);
+
+  
+
+  this.loader.addAnimation([{
+    "start":16,"duration":666,
+    "text":{"string":"Voting Behavior Simulation in Progress","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":1,"g":1,"b":1,"a":()=>1-(window.suddenDeath)}],
+    "position":[{"x":0.0,"y":0.4,"z":0}],
+    "scale":[{"uniform2d":1.75}],
+  }]);
+
+  this.loader.addAnimation([{
+    "start":0,"duration":666,
+    "text":{"string":"SUDDEN DEATH ACTIVATED","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":()=>Math.random(),"g":()=>Math.random(),"b":()=>Math.random(),"a":()=>window.suddenDeath-window.preEnd}],
+    "position":[{"x":0.0,"y":0.4,"z":0}],
+    "scale":[{"uniform2d":()=>2+.5*Math.sin(10*getSceneTimeFromStart())}],
+  }]);
+
+
+  this.loader.addAnimation([{
+    "start":0,"duration":666,
+    "text":{"string":"The Simulation has Spoken","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end}],
+    "position":[{"x":0.0,"y":0.34,"z":0}],
+    "scale":[{"uniform2d":2}],
+  }]);
+
+  this.loader.addAnimation([{
+    "start":0,"duration":666,
+    "text":{"string":"For The Next Five Years","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end}],
+    "position":[{"x":0.0,"y":0.2,"z":0}],
+    "scale":[{"uniform2d":2}],
+  }]); 
+  
+  this.loader.addAnimation([{
+    "start":0,"duration":666,
+    "text":{"string":partyNames1[party1[1]] + " " + partyNames2[party1[1]],"name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end*window.winnerparty1}],
+    "position":[{"x":0.0,"y":.1,"z":0}],
+    "scale":[{"uniform2d":3.5}],
+  }]); 
+
+  this.loader.addAnimation([{
+    "start":0,"duration":666,
+    "text":{"string":partyNames1[party2[1]] + " " + partyNames2[party2[1]],"name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end*window.winnerparty2}],
+    "position":[{"x":0.0,"y":.1,"z":0}],
+    "scale":[{"uniform2d":3.5}],
+  }]); 
+
+  this.loader.addAnimation([{
+    "start":0,"duration":666,
+    "text":{"string":"Rules The Free World","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end}],
+    "position":[{"x":0.0,"y":0.0,"z":0}],
+    "scale":[{"uniform2d":2}],
+  }]); 
+
+  
+  this.loader.addAnimation({
+    initFunction:(animation)=>{
+    //    console.log('loading sounds');
+
+        animation.sounds = {};
+        const sounds =  ['endhit.mp3','suddendeath.mp3'];
+        sounds.forEach((sound) => {
+            const name = sound.replaceAll(/\.mp3/gi,'');
+            console.log("sound name " + name);
+            const audioFile = new AudioFile();
+            audioFile.load(sound);
+            animation.sounds[name] = audioFile;
+        });
+    },
+    runFunction:(animation)=>{
+
+
+
+        if(window.suddenDeath && !window.suddenDeathSFXPlayed)
+        {
+        window.suddenDeathSFXPlayed = true;
+        animation.sounds.suddendeath.play();  
+        }
+
+        if(window.end && !window.endSFXPlayed)
+          {
+          window.endSFXPlayed = true;
+          animation.sounds.endhit.play();  
+          }
+
+    }
+});
 
 };
