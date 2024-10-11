@@ -82,7 +82,7 @@ Demo.prototype.addEffectEntities = function (
                 Math.pow(entities[i].y - entities[k].y,2.0));
               
               let sizeCombined = Math.sqrt(entities[i].size)+Math.sqrt(entities[k].size);
-              if(distance<=sizeCombined)
+              if(distance<=sizeCombined && window.end < 1)
               {
                 if(entities[i].alignment == entities[k].alignment)
                   {
@@ -165,9 +165,9 @@ Demo.prototype.addEffectEntities = function (
         if(getSceneTimeFromStart() > window.endTime)
             window.end = 1;
 
-        if(getSceneTimeFromStart() > window.endTime + 10)
+        if(getSceneTimeFromStart() > window.endTime + 15)
             window.location.hash = 'webdemoexe_exit';
-          
+
         if(window.end)
         {          
           if(reds>blues)
@@ -261,7 +261,6 @@ Demo.prototype.addEffectEntities = function (
 
         entities[i].x += entities[i].xDir;
         entities[i].y += entities[i].yDir;
-
         
         if(entities[i].x > sizeX || entities[i].x < -sizeX)
           entities[i].xDir = -entities[i].xDir;

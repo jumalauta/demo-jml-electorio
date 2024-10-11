@@ -228,7 +228,7 @@ Demo.prototype.init = function () {
 
   this.loader.addAnimation([{
     "start":4,"duration":4,
-    "text":{"string":"We Have a Solution","name":"multiSceneEffects/techfont.ttf"
+    "text":{"string":"We Have the Solution","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
     "color":[{"r":1.0,"g":1.0,"b":1.0}],
@@ -307,7 +307,7 @@ Demo.prototype.init = function () {
   }]);
   this.loader.addAnimation([{
     "start":10.5,"duration":5.5,
-    "text":{"string":"elect.or","name":"multiSceneEffects/techfont.ttf"
+    "text":{"string":"elector.io","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
     "color":[{"r":1.0,"g":1.0,"b":1.0}],
@@ -322,7 +322,7 @@ Demo.prototype.init = function () {
     "text":{"string":partyNames1[party1[0]] + " " + partyNames2[party1[1]],"name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
-    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "color":[{"r":1.0,"g":1.0,"b":1.0, "a": ()=>1.0-window.preEnd}],
     "position":[{"x":-.2,"y":-0.36,"z":0}],
     "scale":[{"uniform2d":1.75}],
   }]);
@@ -332,7 +332,7 @@ Demo.prototype.init = function () {
     "text":{"string":partyNames1[party2[0]] + " " + partyNames2[party2[1]],"name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
-    "color":[{"r":1.0,"g":1.0,"b":1.0}],
+    "color":[{"r":1.0,"g":1.0,"b":1.0,"a": ()=>1.0-window.preEnd}],
     "position":[{"x":0.2,"y":-0.36,"z":0}],
     "scale":[{"uniform2d":1.75}],
   }]);
@@ -344,7 +344,7 @@ Demo.prototype.init = function () {
     "text":{"string":"Voting Behavior Simulation in Progress","name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
-    "color":[{"r":1,"g":1,"b":1,"a":()=>1-(window.suddenDeath)}],
+    "color":[{"r":1,"g":1,"b":1,"a":()=>1-(window.suddenDeath)-window.preEnd}],
     "position":[{"x":0.0,"y":0.4,"z":0}],
     "scale":[{"uniform2d":1.75}],
   }]);
@@ -382,7 +382,7 @@ Demo.prototype.init = function () {
   
   this.loader.addAnimation([{
     "start":0,"duration":666,
-    "text":{"string":partyNames1[party1[1]] + " " + partyNames2[party1[1]],"name":"multiSceneEffects/techfont.ttf"
+    "text":{"string":partyNames1[party1[0]] + " " + partyNames2[party1[1]],"name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
     "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end*window.winnerparty1}],
@@ -392,10 +392,20 @@ Demo.prototype.init = function () {
 
   this.loader.addAnimation([{
     "start":0,"duration":666,
-    "text":{"string":partyNames1[party2[1]] + " " + partyNames2[party2[1]],"name":"multiSceneEffects/techfont.ttf"
+    "text":{"string":partyNames1[party2[0]] + " " + partyNames2[party2[1]],"name":"multiSceneEffects/techfont.ttf"
     },
     "perspective":"2d", 
     "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end*window.winnerparty2}],
+    "position":[{"x":0.0,"y":.1,"z":0}],
+    "scale":[{"uniform2d":3.5}],
+  }]); 
+
+  this.loader.addAnimation([{
+    "start":0,"duration":666,
+    "text":{"string":"CHAOS","name":"multiSceneEffects/techfont.ttf"
+    },
+    "perspective":"2d", 
+    "color":[{"r":()=>window.end,"g":()=>window.end,"b":()=>window.end,"a":()=>window.end*window.winnerparty3}],
     "position":[{"x":0.0,"y":.1,"z":0}],
     "scale":[{"uniform2d":3.5}],
   }]); 
